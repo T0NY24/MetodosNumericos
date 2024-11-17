@@ -1,0 +1,151 @@
+--------------- CODIGO LITERAL B ---------------------
+% Método del Punto Fijo sin usar fixpt
+% Definir la función g(x) para el método del punto fijo
+g = @(x) (10*x + 5).^(1/3); % Reformulación de la ecuación original
+
+% Parámetros
+x0 = 1; % Valor inicial
+TolX = 1e-4; % Tolerancia
+MaxIter = 50; % Número máximo de iteraciones
+
+% Inicialización
+x = x0;
+err = Inf; % Inicializamos el error a un valor alto
+iter = 0; % Inicializamos el contador de iteraciones
+X = []; % Vector para guardar los valores de x
+Errors = []; % Vector para guardar los errores
+
+% Crear el historial de x
+xx(1) = x0;
+
+% Formato de impresión para la tabla de iteraciones
+fprintf(" k     xi       xx(k)       error\n");
+fprintf(" %2d %10.5f %10.5f\n", 0, x0, xx(1));
+
+% Método del Punto Fijo
+for k = 2:MaxIter
+    xx(k) = g(xx(k-1)); % Calculamos el nuevo valor
+    err = abs(xx(k) - xx(k-1)); % Calculamos el error
+    Errors(k-1) = err; % Guardamos el error en el vector de errores
+    
+    % Mostrar iteración, valor y error
+    fprintf(" %2d %10.5f %10.5f %10.5f\n", k-1, xx(k), xx(k), err);
+    
+    if err < TolX
+        break; % Si el error es menor que la tolerancia, salir
+    end
+end
+
+% Resultado final
+x = xx(k);
+fprintf('\nResultado final: x = %.6f\n', x);
+fprintf('Número de iteraciones: %d\n', k-1);
+fprintf('Último error: %.6e\n', err);
+
+% Mostrar la tabla de iteraciones
+disp('Tabla de iteraciones:');
+T = table((1:k-1)', xx(2:k)', Errors(1:k-1)', 'VariableNames', {'Iteracion', 'x_value', 'Error_value'});
+disp(T);
+
+% Graficar los resultados
+figure;
+f1 = @(x) x; % Función y = x
+f2 = @(x) (10*x + 5).^(1/3); % Función g(x)
+
+Z = ezplot(f1); 
+hold on; 
+ezplot(f2); 
+grid on; 
+axis([-5 5 -5 5]); 
+set(Z, "Color", "b", "LineStyle", "--");
+
+% Graficar los puntos iterativos sobre la gráfica
+plot(xx, xx, 'ro', 'MarkerSize', 6, 'MarkerFaceColor', 'r'); 
+
+% Personalización de la gráfica
+xlabel('x');
+ylabel('g(x)');
+title('Método del Punto Fijo: Ecuación x^3 - 10x - 5 = 0');
+legend('y = x', 'g(x)', 'Iteraciones', 'Location', 'Best');
+
+----------------- CODIGO LITERAL C ---------------
+% Método del Punto Fijo sin usar fixpt
+% Definir la función g(x) para el método del punto fijo
+g = @(x) exp(-sin(x)); % Reformulación de la ecuación original
+
+% Parámetros
+x0 = 1; % Valor inicial
+TolX = 1e-4; % Tolerancia
+MaxIter = 50; % Número máximo de iteraciones
+
+% Inicialización
+x = x0;
+err = Inf; % Inicializamos el error a un valor alto
+iter = 0; % Inicializamos el contador de iteraciones
+X = []; % Vector para guardar los valores de x
+Errors = []; % Vector para guardar los errores
+
+% Crear el historial de x
+xx(1) = x0;
+
+% Formato de impresión para la tabla de iteraciones
+fprintf(" k     xi       xx(k)       error\n");
+fprintf(" %2d %10.5f %10.5f\n", 0, x0, xx(1));
+
+% Método del Punto Fijo
+for k = 2:MaxIter
+    xx(k) = g(xx(k-1)); % Calculamos el nuevo valor
+    err = abs(xx(k) - xx(k-1)); % Calculamos el error
+    Errors(k-1) = err; % Guardamos el error en el vector de errores
+    
+    % Mostrar iteración, valor y error
+    fprintf(" %2d %10.5f %10.5f %10.5f\n", k-1, xx(k), xx(k), err);
+    
+    if err < TolX
+        break; % Si el error es menor que la tolerancia, salir
+    end
+end
+
+% Resultado final
+x = xx(k);
+fprintf('\nResultado final: x = %.6f\n', x);
+fprintf('Número de iteraciones: %d\n', k-1);
+fprintf('Último error: %.6e\n', err);
+
+% Mostrar la tabla de iteraciones
+disp('Tabla de iteraciones:');
+T = table((1:k-1)', xx(2:k)', Errors(1:k-1)', 'VariableNames', {'Iteracion', 'x_value', 'Error_value'});
+disp(T);
+
+% Graficar los resultados
+figure;
+f1 = @(x) x; % Función y = x
+f2 = @(x) exp(-sin(x)); % Función g(x)
+
+Z = ezplot(f1, [0 5]); 
+hold on; 
+ezplot(f2, [0 5]); 
+grid on; 
+axis([0 5 0 5]); 
+set(Z, "Color", "b", "LineStyle", "--");
+
+% Graficar los puntos iterativos sobre la gráfica
+plot(xx, xx, 'ro', 'MarkerSize', 6, 'MarkerFaceColor', 'r'); 
+
+% Personalización de la gráfica
+xlabel('x');
+ylabel('g(x)');
+title('Método del Punto Fijo: Ecuación sin(x) + ln(x) = 0');
+legend('y = x', 'g(x)', 'Iteraciones', 'Location', 'Best');
+
+% Verificación de la solución
+fprintf('\nVerificación de la solución:\n');
+fprintf('sin(x) + ln(x) = %e\n', sin(x) + log(x));
+
+% Agregar una gráfica de convergencia
+figure;
+plot(1:k-1, Errors, 'b-o', 'LineWidth', 1.5);
+grid on;
+xlabel('Iteración');
+ylabel('Error');
+title('Convergencia del Método del Punto Fijo');
